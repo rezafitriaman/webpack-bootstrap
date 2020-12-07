@@ -79,24 +79,24 @@ module.exports = (env) => {
           ],
         },
         {
-            test: /\.(jpe?g|png|gif|svg)$/,
-            use: [
-                {
-                    loader: 'url-loader',
-                    options: {
-                        limit: 40000,
-                        name: '[name].[ext]',
-                        outputPath: 'img/',
-                    }
-                },
-                {
-                    loader: 'image-webpack-loader',
-                    options: {
-                        bypassOnDebug: true, // webpack@1.x
-                        disable: true, // webpack@2.x and newer
-                    },
-                },
-            ]
+          test: /\.(jpe?g|png|gif|svg)$/,
+          use: [
+            {
+              loader: "url-loader",
+              options: {
+                limit: 40000,
+                name: "[name].[ext]",
+                outputPath: "img/",
+              },
+            },
+            {
+              loader: "image-webpack-loader",
+              options: {
+                bypassOnDebug: true, // webpack@1.x
+                disable: true, // webpack@2.x and newer
+              },
+            },
+          ],
         },
         {
           test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,

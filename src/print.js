@@ -1,4 +1,4 @@
 export default function printMe() {
 
-  console.log('Updating print.js...');
+  console.warn('Updating sssdsd.js...');
  }

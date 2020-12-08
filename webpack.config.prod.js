@@ -1,6 +1,6 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ESLintPlugin = require("eslint-webpack-plugin");
-
+const CopyPlugin = require("copy-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -13,17 +13,25 @@ module.exports = (env) => {
 
   return {
     mode: "production",
-    devtool: "source-map",
     entry: "./src/index.ts",
+    target: "web",
+    devtool: "source-map",
+    performance: {
+      //hints: 'error'
+    },
     plugins: [
       new ESLintPlugin({
         failOnError: false,
         failOnWarning: false,
         emitWarning: true,
       }),
+      new CopyPlugin({
+        patterns: [{ from: "./src/img", to: "./img" }],
+      }),
       new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
       new HtmlWebpackPlugin({
-        title: "Development",
+        title: "production",
+        template: "src/index.hbs",
       }),
       new MiniCssExtractPlugin({
         filename: "[name].css",
@@ -32,7 +40,7 @@ module.exports = (env) => {
       }),
     ],
     output: {
-      filename: "[name].bundle.js",
+      filename: "[name].[contenthash].bundle.js",
       path: path.resolve(__dirname, "dist"),
       publicPath: "/",
     },
@@ -79,36 +87,20 @@ module.exports = (env) => {
           ],
         },
         {
-          test: /\.(jpe?g|png|gif|svg)$/,
-          use: [
-            {
-              loader: "url-loader",
-              options: {
-                limit: 40000,
-                name: "[name].[ext]",
-                outputPath: "img/",
-              },
-            },
-            {
-              loader: "image-webpack-loader",
-              options: {
-                bypassOnDebug: true, // webpack@1.x
-                disable: true, // webpack@2.x and newer
-              },
-            },
-          ],
+          test: /\.hbs$/,
+          loader: "handlebars-loader",
         },
         {
-          test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-          use: [
-            {
-              loader: "file-loader",
-              options: {
-                name: "[name].[ext]",
-                outputPath: "fonts/",
-              },
-            },
-          ],
+          test: /\.(png|jpg|jpeg|gif)$/i,
+          type: "asset/resource",
+        },
+        {
+          test: /\.svg/,
+          type: "asset/inline",
+        },
+        {
+          test: /\.(woff|woff2|eot|ttf|otf)$/i,
+          type: "asset/resource",
         },
         {
           test: /\.(csv|tsv)$/i,
@@ -122,6 +114,10 @@ module.exports = (env) => {
     },
     resolve: {
       extensions: [".tsx", ".ts", ".js"],
+    },
+    optimization: {
+      minimize: true,
+      minimizer: [new CssMinimizerPlugin()],
     },
   };
 };

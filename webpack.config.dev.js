@@ -1,6 +1,6 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ESLintPlugin = require("eslint-webpack-plugin");
-
+const CopyPlugin = require("copy-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -15,16 +15,21 @@ module.exports = (env) => {
     mode: "development",
     entry: "./src/index.ts",
     target: "web",
-    devtool: "source-map",
+    devtool: "eval-source-map",
+    watch: true,
     watchOptions: {
       ignored: /node_modules/,
     },
     devServer: {
       host: "0.0.0.0",
       port: 8081,
-      writeToDisk: true,
+      writeToDisk: false,
       contentBase: path.join(__dirname, "dist"),
-      hot: true
+      hot: true,
+      overlay: {
+        warnings: true,
+        errors: true
+      }
     },
     plugins: [
       new ESLintPlugin({
@@ -32,13 +37,16 @@ module.exports = (env) => {
         failOnWarning: false,
         emitWarning: true,
       }),
+      new CopyPlugin({
+        patterns: [
+          { from: "./src/img", to: "./img" },
+        ],
+      }),
       new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
-      new HtmlWebpackPlugin(
-        {
-          title: 'master!',
-          template: 'src/index.hbs'
-        }
-      ),
+      new HtmlWebpackPlugin({
+        title: "development",
+        template: "src/index.hbs",
+      }),
       new MiniCssExtractPlugin({
         filename: "[name].css",
         chunkFilename: "[id].css",
@@ -94,7 +102,7 @@ module.exports = (env) => {
         },
         {
           test: /\.hbs$/,
-          loader: 'handlebars-loader',
+          loader: "handlebars-loader",
         },
         {
           test: /\.(png|jpg|jpeg|gif)$/i,

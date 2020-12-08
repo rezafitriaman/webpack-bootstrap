@@ -1,11 +1,12 @@
 import * as _ from 'lodash';
 import './style.scss';
 import './index.hbs'
+// import { printMe } from './print'
 
 function component() {
     const element = document.createElement('div');
 
-    element.innerHTML = _.join(['Hello', 'd'], ' ');
+    element.innerHTML = _.join(['Hello', 'dika'], ' ');
 
     return element;
   }

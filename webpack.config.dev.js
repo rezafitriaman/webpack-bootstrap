@@ -20,10 +20,13 @@ module.exports = (env) => {
     watchOptions: {
       ignored: /node_modules/,
     },
+    //performance: {
+      //hints: 'warning'
+    //},
     devServer: {
       host: "0.0.0.0",
       port: 8081,
-      writeToDisk: false,
+      writeToDisk: true,
       contentBase: path.join(__dirname, "dist"),
       hot: true,
       overlay: {
@@ -45,7 +48,8 @@ module.exports = (env) => {
       new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
       new HtmlWebpackPlugin({
         title: "development",
-        template: "src/index.hbs",
+        template: "src/index.blade.php",
+        filename: `index.blade.php`,
       }),
       new MiniCssExtractPlugin({
         filename: "[name].css",
@@ -103,6 +107,17 @@ module.exports = (env) => {
         {
           test: /\.hbs$/,
           loader: "handlebars-loader",
+        },
+        {
+          test: /\.php$/,
+          use: [
+            {
+              loader: 'raw-loader',
+              options: {
+                esModule: false,
+              },
+            },
+          ],
         },
         {
           test: /\.(png|jpg|jpeg|gif)$/i,

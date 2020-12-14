@@ -1,12 +1,13 @@
 import * as _ from 'lodash';
 import './style.scss';
-import './index.hbs'
+//import './index.hbs';
+import './index.blade.php'
 // import { printMe } from './print'
 
 function component() {
     const element = document.createElement('div');
 
-    element.innerHTML = _.join(['Hello', 'dika'], ' ');
+    element.innerHTML = _.join(['Hello', 'ddfd'], ' ');
 
     return element;
   }

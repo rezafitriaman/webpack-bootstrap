@@ -1,4 +1,4 @@
-{
+module.exports = {
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2018,
@@ -16,4 +16,4 @@
     "es6": true
   },
   "ignorePatterns": ["src/banners/mainBanner/icons/*"]
-}
+};

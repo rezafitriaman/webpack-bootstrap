@@ -36,9 +36,10 @@ module.exports = (env) => {
     },
     plugins: [
       new ESLintPlugin({
-        failOnError: false,
-        failOnWarning: false,
+        failOnError: true,
+        failOnWarning: true,
         emitWarning: true,
+        //eslintPath: path.resolve(__dirname, ".eslintrc.json")
       }),
       new CopyPlugin({
         patterns: [
@@ -48,8 +49,8 @@ module.exports = (env) => {
       new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
       new HtmlWebpackPlugin({
         title: "development",
-        template: "src/index.blade.php",
-        filename: `index.blade.php`,
+        template: "src/index.hbs",
+        //filename: `index.blade.php`,
       }),
       new MiniCssExtractPlugin({
         filename: "[name].css",
@@ -72,7 +73,14 @@ module.exports = (env) => {
             {
               loader: "babel-loader",
             },
-          ],
+            {
+              loader: 'eslint-loader',
+              options: {
+                  failOnError: false,
+                  failOnWarning: false,
+                  emitWarning: true,
+              },
+          }],
         },
         {
           test: /\.s[ac]ss$/i,

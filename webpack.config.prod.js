@@ -2,6 +2,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ESLintPlugin = require("eslint-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const TerserPlugin = require('terser-webpack-plugin');
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
@@ -17,12 +18,12 @@ module.exports = (env) => {
     target: "web",
     devtool: "source-map",
     performance: {
-      //hints: 'error'
+      hints:"warning"
     },
     plugins: [
       new ESLintPlugin({
-        failOnError: false,
-        failOnWarning: false,
+        failOnError: true,
+        failOnWarning: true,
         emitWarning: true,
       }),
       new CopyPlugin({
@@ -54,7 +55,14 @@ module.exports = (env) => {
             {
               loader: "babel-loader",
             },
-          ],
+            {
+              loader: 'eslint-loader',
+              options: {
+                  failOnError: false,
+                  failOnWarning: false,
+                  emitWarning: true,
+              },
+          }],
         },
         {
           test: /\.s[ac]ss$/i,
@@ -91,6 +99,17 @@ module.exports = (env) => {
           loader: "handlebars-loader",
         },
         {
+          test: /\.php$/,
+          use: [
+            {
+              loader: 'raw-loader',
+              options: {
+                esModule: false,
+              },
+            },
+          ],
+        },
+        {
           test: /\.(png|jpg|jpeg|gif)$/i,
           type: "asset/resource",
         },
@@ -117,7 +136,10 @@ module.exports = (env) => {
     },
     optimization: {
       minimize: true,
-      minimizer: [new CssMinimizerPlugin()],
+      minimizer: [
+        new CssMinimizerPlugin(),
+        new TerserPlugin(),
+      ],
     },
   };
 };

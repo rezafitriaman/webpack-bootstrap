@@ -13,7 +13,10 @@ module.exports = (env) => {
 
   return {
     mode: "development",
-    entry: "./src/index.ts",
+    entry: {
+      index: "./src/index.ts",
+      //home: "./src/home.ts"
+    },
     target: "web",
     devtool: "eval-source-map",
     watch: true,
@@ -52,6 +55,11 @@ module.exports = (env) => {
         template: "src/index.hbs",
         //filename: `index.blade.php`,
       }),
+      /* new HtmlWebpackPlugin({
+        title: "development",
+        template: "src/home.hbs",
+        //filename: `index.blade.php`,
+      }), */
       new MiniCssExtractPlugin({
         filename: "[name].css",
         chunkFilename: "[id].css",

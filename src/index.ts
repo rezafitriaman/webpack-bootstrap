@@ -1,10 +1,10 @@
-import * as _ from 'lodash';
-import './style.scss';
+//import * as _ from 'lodash';
+import './login.scss';
 import './index.hbs';
 //import './index.blade.php'
 // import { printMe } from './print'
 
-function component() {
+/* function component() {
     const element = document.createElement('div');
     //const reza = 'reza'
 
@@ -20,4 +20,4 @@ function component() {
       console.warn('Accepting the updated printMe module!');
       //printMe();
     })
-  }
+  } */
